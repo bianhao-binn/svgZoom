@@ -5,13 +5,96 @@
     <title></title>
     <link rel="stylesheet" href="styles.css">
     <script type="text/javascript" src="jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="raphael-min.js"></script>
 </head>
 <body>
-    
+    <div id="menu">
+        <ul>
+            <li id="tBtn">纵向上加</li>
+            <li id="bBtn">纵向下加</li>
+            <li id="lBtn">横向左加</li>
+            <li id="rBtn">横向右加</li>
+        </ul>
+    </div>
+    <div id="inner">
+        <div id="elementsSon">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            	 viewBox="0 0 627 627" enable-background="new 0 0 627 627" xml:space="preserve">
+                <g id="hs">
+            	    <g id="nw" transform="translate(0,0) scale(1,1)">
+                  		<path fill="#000000" d="M49.5,0C22.1,0.3,0,22.6,0,50h49.5V0z"/>
+                  	</g>
+                  	<g id="n" transform="translate(0,0) scale(1,1)">
+                  		<path fill="#000000" d="M577,50V0H50c-0.2,0-0.3,0-0.5,0v50H577z"/>
+                  	</g>
+                  	<g id="c" transform="translate(0,0) scale(1,1)">
+                  		<rect x="49.5" y="50" fill="#000000" width="527.5" height="527"/>
+                  	</g>
+                  	<g id="ne" transform="translate(0,0) scale(1,1)">
+                  		<path fill="#000000" d="M627,50c0-27.6-22.4-50-50-50v50H627z"/>
+                  	</g>
+                  	<g id="s" transform="translate(0,0) scale(1,1)">
+                  		<path fill="#000000" d="M49.5,577v50c0.2,0,0.3,0,0.5,0h527v-50H49.5z"/>
+                  	</g>
+                  	<g id="w" transform="translate(0,0) scale(1,1)">
+                  		<rect y="50" fill="#000000" width="49.5" height="527"/>
+                  	</g>
+                  	<g id="se" transform="translate(0,0) scale(1,1)">
+                  		<path fill="#000000" d="M577,627c27.6,0,50-22.4,50-50h-50V627z"/>
+                  	</g>
+                  	<g id="e" transform="translate(0,0) scale(1,1)">
+                  		<rect x="577" y="50" fill="#000000" width="50" height="527"/>
+                  	</g>
+                  	<g id="sw" transform="translate(0,0) scale(1,1)">
+                  		<path fill="#000000" d="M0,577c0,27.4,22.1,49.7,49.5,50v-50H0z"/>
+                  	</g>
+                </g>
+            </svg>
+        </div>
+    </div>
 </body>
 <script>
 (function(){
-        
+
+// svg的初始值
+var this_width = $("#elementsSon").width();
+var viewbox = $("#elementsSon").html().match(/viewBox\=\"[\d\.\s]+/).toString().replace('viewBox="','').split(" ");
+// 当前svg现实宽与默认宽的比例
+var scale = this_width / parseFloat(viewbox[2]);
+// 默认设置height,width增加量
+var add_height = 10 / scale;
+var add_width = 10 / scale;
+
+// 纵向上加按钮
+$("#tBtn").click(function(){
+    var w_off_top = $("#w").offset().top - $("svg").offset().top;
+    var w_top = $("#w").attr("transform").match(/translate\([\d\.\,\s\-]+/).toString().replace('translate(','').split(",");
+    var w_scale = $("#w").attr("transform").match(/scale\([\d\.\,\s\-]+/).toString().replace('scale(','').split(",");
+    // 先把jq对象转换成js对象，然后利用BBox方法，取得g标签的height
+    var w_height = $("#w")[0].getBBox().height;
+    var percent_scale = w_height / parseFloat(w_scale[1]);
+    var add_scale = add_height / percent_scale;
+    var new_scale = add_scale + parseFloat(w_scale[1]);
+    console.log(new_scale);
+    console.log(w_off_top / parseFloat(w_scale[1]) * add_scale);
+    console.log($("#nw")[0].getBBox().height / parseFloat(w_scale[1]) * add_scale);
+});
+
+// 纵向下加按钮
+$("#bBtn").click(function(){
+   
+});
+
+// 横向左加按钮
+$("#lBtn").click(function(){
+   
+});
+
+// 横向右加按钮
+$("#rBtn").click(function(){
+   
+});
+
 })();
 </script>
 </html>
