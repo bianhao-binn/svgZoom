@@ -61,7 +61,7 @@ var this_width = $("#elementsSon").width();
 var viewbox = $("#elementsSon").html().match(/viewBox\=\"[\d\.\s]+/).toString().replace('viewBox="','').split(" ");
 // 当前svg现实宽与默认宽的比例
 var scale = this_width / parseFloat(viewbox[2]);
-// 默认设置height,width增加量
+// 默认设置height,width增加量,add_height为计算过svg中的值
 var add_height = 10 / scale;
 var add_width = 10 / scale;
 
@@ -70,14 +70,18 @@ $("#tBtn").click(function(){
     var w_off_top = $("#w").offset().top - $("svg").offset().top;
     var w_top = $("#w").attr("transform").match(/translate\([\d\.\,\s\-]+/).toString().replace('translate(','').split(",");
     var w_scale = $("#w").attr("transform").match(/scale\([\d\.\,\s\-]+/).toString().replace('scale(','').split(",");
+    var sw_top = $("#sw").attr("transform").match(/translate\([\d\.\,\s\-]+/).toString().replace('translate(','').split(",");
+    var sw_scale = $("#sw").attr("transform").match(/scale\([\d\.\,\s\-]+/).toString().replace('scale(','').split(",");
     // 先把jq对象转换成js对象，然后利用BBox方法，取得g标签的height
     var w_height = $("#w")[0].getBBox().height;
     var percent_scale = w_height / parseFloat(w_scale[1]);
     var add_scale = add_height / percent_scale;
     var new_scale = add_scale + parseFloat(w_scale[1]);
-    console.log(new_scale);
-    console.log(w_off_top / parseFloat(w_scale[1]) * add_scale);
-    console.log($("#nw")[0].getBBox().height / parseFloat(w_scale[1]) * add_scale);
+    var new_top = $("#nw")[0].getBBox().height / parseFloat(w_scale[1]) * add_scale;
+    var new_w_transform = "translate(" + w_top[0] + "," + -1 * parseFloat(new_top) + ") scale(" + w_scale[0] + "," + new_scale + ")";
+    var new_sw_transform = "translate(" + sw_top[0] + "," + add_height + ") scale(" + sw_scale[0] + "," + sw_scale[1] + ")";
+    $("#w").attr("transform",new_w_transform);
+    $("#sw").attr("transform",new_sw_transform);
 });
 
 // 纵向下加按钮
